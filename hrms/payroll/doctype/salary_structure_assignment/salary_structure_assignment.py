@@ -170,9 +170,22 @@ class SalaryStructureAssignment(Document):
 			frappe.throw(_("Total percentage against cost centers should be 100"))
 
 	@frappe.whitelist()
+<<<<<<< HEAD
 	def earning_and_deduction_entries_does_not_exists(self):
 		if self.enabled_settings_to_specify_earnings_and_deductions_till_date():
 			if not self.joined_in_the_same_month() and not self.have_salary_slips():
+=======
+	def are_opening_entries_required(self) -> bool:
+		if not get_tax_component(self.salary_structure):
+			return False
+
+		if self.has_emp_joined_after_payroll_period_start() and not self.has_existing_salary_slips():
+			return True
+		else:
+			if not self.docstatus.is_draft() and (
+				self.taxable_earnings_till_date or self.tax_deducted_till_date
+			):
+>>>>>>> 72c4b7583 (fix(Salary Assignment): skip warning for missing opening entries in the absence of tax components (#2472))
 				return True
 			else:
 				if self.docstatus in [1, 2] and (
